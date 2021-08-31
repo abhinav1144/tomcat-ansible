@@ -68,10 +68,23 @@
     state: started
     enabled: yes
   when: ansible_service_mgr == "systemd"
+
 - name: Set UI access credentials
   template:
     src: tomcat-users.xml.j2
     dest: /usr/share/tomcat/conf/tomcat-users.xml
+  notify: restart tomcat
+
+- name: Set IP Address
+  template:
+    src: server.xml.j2
+    dest: /usr/share/tomcat/conf/server.xml
+  notify: restart tomcat
+
+- name: Set allow Address
+  template:
+    src: manager.xml.j2
+    dest: /usr/share/tomcat/webapps/host-manager/WEB-INF/manager.xml
   notify: restart tomcat
 
 - name: Allow access to Manager and Host Manager apps from any IP
